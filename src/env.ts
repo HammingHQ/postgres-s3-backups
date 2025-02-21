@@ -1,4 +1,4 @@
-import { envsafe, str, bool } from "envsafe";
+import { envsafe, str, bool, num } from "envsafe";
 
 export const env = envsafe({
   AWS_ACCESS_KEY_ID: str(),
@@ -7,11 +7,6 @@ export const env = envsafe({
   AWS_S3_REGION: str(),
   BACKUP_DATABASE_URL: str({
     desc: 'The connection string of the database to backup.'
-  }),
-  BACKUP_CRON_SCHEDULE: str({
-    desc: 'The cron schedule to run the backup on.',
-    default: '0 5 * * *',
-    allowEmpty: true
   }),
   AWS_S3_ENDPOINT: str({
     desc: 'The S3 custom endpoint you want to use.',
@@ -50,6 +45,16 @@ export const env = envsafe({
   BACKUP_OPTIONS: str({
     desc: 'Any valid pg_dump option.',
     default: '',
+    allowEmpty: true,
+  }),
+  BACKUP_RETENTION_COUNT: num({
+    desc: 'Number of backups to keep for each backup type (10min, hourly, daily, weekly). Default is 5.',
+    default: 5,
+    allowEmpty: true,
+  }),
+  PARALLEL_JOBS: num({
+    desc: 'Number of parallel jobs to use for backup (requires PostgreSQL 9.3+). Default is 1.',
+    default: 1,
     allowEmpty: true,
   }),
 })
